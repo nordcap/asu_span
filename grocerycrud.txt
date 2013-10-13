@@ -1,0 +1,641 @@
+<?php
+void add_action( string $label,  string $image_url , string $link_url , string $css_class ,  mixed $url_callback)
+//добавить действие(операцию) в табличный список.
+/*
+1. добавьте метку для вашего субъекта, для примера "Photo Gallery"
+2. добавьте url избражения
+3. добавьте пользовательский url. этот url должен быть помещён в ф-ию site_url с конкатенацией primary_key
+4. добавьте css класс, который подключает изображение
+5. можно добавить собственную ф-ию обработки url
+*/
+?>
+<?php 
+void add_fields( string $var [, string $var [, string $... ]]  )
+//добавить поле
+?>
+<?php 
+
+void callback_add_field( string $field , mixed $callback )
+//добавляет поле в форму с обработчиком (возвращающим код элемента)
+//пример
+function example_callback_add_field(){
+    $this->grocery_crud->set_table('offices');
+    $this->grocery_crud->set_subject('Office');
+    $this->grocery_crud->required_fields('city');
+    $this->grocery_crud->columns('city','country','phone','addressLine1','postalCode');
+ 
+    $this->grocery_crud->callback_add_field('phone',array($this,'add_field_callback_1'));
+    $this->grocery_crud->callback_add_field('state',array($this,'add_field_callback_2'));
+ 
+    $output = $this->grocery_crud->render();
+ 
+    $this->_example_output($output);
+}
+ 
+function add_field_callback_1()
+{
+    return '+30 <input type="text" maxlength="50" value="" name="phone" style="width:462px">';
+}
+ 
+function add_field_callback_2()
+{
+    return '<input type="text" maxlength="50" value="" name="state" style="width:400px"> ( for U.S. only )';
+}
+?>
+<?php
+void callback_after_delete(mixed $callback )
+//функция запускается при успешном завершении операции удаления
+?>
+<?php
+void callback_after_insert(mixed $callback )
+//вызывается после автомат. вставки в crud 
+?>
+<?php
+void callback_after_update(mixed $callback )
+//вызывается после автомат. обновления в crud 
+?>
+<?php
+void callback_after_upload( mixed $callback )
+//вызывается после завершения загрузки
+//пример
+function employees_management()
+{
+    $crud = new grocery_CRUD();
+ 
+    $this->load->config('grocery_crud');
+    $this->config->set_item('grocery_crud_file_upload_allow_file_types',
+                                                            'gif|jpeg|jpg|png');
+ 
+    $crud->set_table('employees');
+    $crud->set_relation('officeCode','offices','city');
+    $crud->display_as('officeCode','Office City');
+    $crud->set_subject('Employee');
+ 
+    $crud->set_field_upload('file_url','assets/uploads/images');
+ 
+    $crud->callback_after_upload(array($this,'example_callback_after_upload'));
+ 
+    $output = $crud->render();
+ 
+    $this->_example_output($output);
+}    
+ 
+/*
+ * Examples of what the $uploader_response, $files_to_upload and $field_info will be:
+$uploader_response = Array
+    (
+        [0] => stdClass Object
+            (
+                [name] => 6d9c1-52.jpg
+                [size] => 495375
+                [type] => image/jpeg
+                [url] => http://grocery_crud/assets/uploads/files/6d9c1-52.jpg
+            )
+ 
+    )
+ 
+$field_info = stdClass Object
+(
+        [field_name] => file_url
+        [upload_path] => assets/uploads/files
+        [encrypted_field_name] => sd1e6fec1
+)
+ 
+$files_to_upload = Array
+(
+        [sd1e6fec1] => Array
+        (
+                [name] => 86.jpg
+                [type] => image/jpeg
+                [tmp_name] => C:\wamp\tmp\phpFC42.tmp
+                [error] => 0
+                [size] => 258177
+        )
+ 
+)
+*/    
+function example_callback_after_upload($uploader_response,$field_info, $files_to_upload)
+{
+    $this->load->library('image_moo');
+ 
+    //Is only one file uploaded so it ok to use it with $uploader_response[0].
+    $file_uploaded = $field_info->upload_path.'/'.$uploader_response[0]->name; 
+ 
+    $this->image_moo->load($file_uploaded)->resize(800,600)->save($file_uploaded,true);
+ 
+    return true;
+}
+?>
+<?php
+void callback_before_delete(mixed $callback )
+//вызывается перед удалением в crud
+?>
+<?php
+void callback_before_insert(mixed $callback )
+//срабатывает перед вставкой crud
+?>
+<?php
+void callback_before_update(mixed $callback )
+//вызывается перед обновлением crud
+?>
+<?php
+void callback_before_upload( mixed $callback )
+//вызывается перед загрузкой файла
+
+function employees_management()
+{
+    $crud = new grocery_CRUD();
+ 
+ 
+    $crud->set_table('employees');
+    $crud->set_relation('officeCode','offices','city');
+    $crud->display_as('officeCode','Office City');
+    $crud->set_subject('Employee');
+ 
+    $crud->set_field_upload('file_url','assets/uploads/files');
+    $crud->callback_before_upload(array($this,'example_callback_before_upload'));
+ 
+    $output = $crud->render();
+ 
+    $this->_example_output($output);
+}    
+ 
+ 
+function example_callback_before_upload($files_to_upload,$field_info)
+{
+/*
+ * Examples of what the $files_to_upload and $field_info will be:    
+$files_to_upload = Array
+(
+        [sd1e6fec1] => Array
+        (
+                [name] => 86.jpg
+                [type] => image/jpeg
+                [tmp_name] => C:\wamp\tmp\phpFC42.tmp
+                [error] => 0
+                [size] => 258177
+        )
+ 
+)
+ 
+$field_info = stdClass Object
+(
+        [field_name] => file_url
+        [upload_path] => assets/uploads/files
+        [encrypted_field_name] => sd1e6fec1
+)
+ 
+*/
+ 
+ 
+    if(is_dir($field_info->upload_path))
+    {
+        return true;
+    }
+    else
+    {
+        return 'I am sorry but it seems that the folder that you are trying to upload doesn\'t exist.';    
+    }
+ 
+}
+?>
+<?php
+void callback_column( string $column , mixed $callback )
+//вызывается по указанному столбцу
+?>
+<?php
+void callback_delete(mixed $callback )
+//вызывается при удалении в crud
+ //пример
+ public function user(){
+        $crud = new grocery_CRUD();
+ 
+        $crud->set_table('cms_user');
+        $crud->set_subject('User List');
+        $crud->required_fields('user_name');
+ 
+        $crud->columns('user_name','email','real_name','active');
+        $crud->change_field_type('active', 'true_false');
+ 
+        $crud->callback_delete(array($this,'delete_user'));
+ 
+        $output = $crud->render();
+ 
+        $this->_example_output($output);
+    }
+ 
+    public function delete_user($primary_key)
+    {
+        return $this->db->update('cms_user',array('active' => '0'),array('id' => $primary_key));
+    }
+ 
+?>
+<?php
+void callback_edit_field( string $field , mixed $callback )
+//вызывается при редактировании поля в форме
+//пример
+function example_callback_edit_field(){
+    $this->grocery_crud->set_table('offices');
+    $this->grocery_crud->set_subject('Office');
+    $this->grocery_crud->required_fields('city');
+    $this->grocery_crud->columns('city','country','phone','addressLine1','postalCode');
+ 
+    $this->grocery_crud->callback_edit_field('phone',array($this,'edit_field_callback_1'));
+ 
+    $output = $this->grocery_crud->render();
+ 
+    $this->_example_output($output);
+}
+ 
+function edit_field_callback_1($value, $primary_key)
+{
+    return '+30 <input type="text" maxlength="50" value="'.$value.'" name="phone" style="width:462px">';
+}
+?>
+<?php
+void callback_field( string $field ,mixed $callback )
+//
+?>
+<?php
+void callback_insert(mixed $callback )
+//вызов при вставке в crud
+?>
+<?php
+void callback_update(mixed $callback )
+//вызов при обновлении crud
+?>
+<?php
+void callback_upload( mixed $callback )
+//вызов при загрузке файлов
+?>
+<?php
+void change_field_type( string $field , string $field_type )
+/*
+изменение поля в форме, присвоение значения
+integer
+true_false
+string
+text
+date
+datetime
+enum
+hidden
+invisible
+password
+*/
+//пример
+function hidden_test($office_id = 0)
+{
+    $crud = new grocery_CRUD();
+ 
+    $crud->set_table('customers');
+    $crud->columns('customerName','contactLastName','phone','city','country','salesRepEmployeeNumber','creditLimit');
+    $crud->display_as('salesRepEmployeeNumber','from Employeer');
+    $crud->set_subject('Customer');
+    $crud->set_relation('salesRepEmployeeNumber','employees','lastName');
+    $crud->add_fields('customerName','contactLastName','phone','city','country','salesRepEmployeeNumber','creditLimit','office_id');
+    $crud->edit_fields('customerName','contactLastName','phone','city','country','salesRepEmployeeNumber','creditLimit');
+ 
+    $crud->change_field_type('office_id', 'hidden', $office_id);
+ 
+    $output = $crud->render();
+ 
+    $this->_example_output($output);
+} 
+//присваиваем полю office_id значение 3
+$crud->change_field_type('office_id', 'hidden', 3);
+?>
+<?php
+void columns( string $var [, string $var [, string $... ]]  )
+//отображение колонок что смотрит пользователь
+?>
+<?php
+void display_as ( $field_name , $display_as )
+//введение всевдонимов заголовков таблицы
+?>
+<?php
+void edit_fields( string $var [, string $var [, string $... ]] )
+//редактирование поля
+?>
+<?php
+void fields( string $var [, string $var [, string $... ]] )
+//поле для добавления,редактирования
+?>
+<?php
+string getState()
+//получение мнформации после обработки рендера
+$states = array(
+		0	=>	'unknown',
+		1	=>	'list',
+		2	=>	'add',
+		3	=>	'edit',
+		4	=>	'delete',
+		5	=>	'insert',
+		6	=>	'update',
+		7	=>  'ajax_list',
+		8   	=>  'ajax_list_info',
+		9	=>  'insert_validation',
+		10	=>	'update_validation',
+		11	=>	'upload_file',
+		12	=>	'delete_file'
+	);
+	
+function employees_management()
+{
+    $crud = new grocery_CRUD();
+ 
+    $crud->set_theme('datatables');
+    $crud->set_table('employees');
+    $crud->set_relation('officeCode','offices','city');
+    $crud->display_as('officeCode','Office City');
+    $crud->set_subject('Employee');
+ 
+    $output = $crud->render();
+ 
+      $state = $crud->getState();
+    $state_info = $crud->getStateInfo();
+ 
+    if($state == 'add')
+    {
+        //Do your cool stuff here . You don't need any State info you are in add
+    }
+    elseif($state == 'edit')
+    {
+        $primary_key = $state_info->primary_key;
+        //Do your awesome coding here. 
+    }
+    else
+    {
+        $this->_example_output($output);
+    }
+}
+ 	
+//Ф-ия getState,getStateInfo используются после отработки рендера 	
+	
+
+?>
+<?php
+object getStateInfo()
+//получение мнформации после обработки рендера
+?>
+<?php
+array get_field_types()
+//получение мнформации после обработки рендера (типы полей)
+?>
+<?php
+string get_primary_key
+//получить первичный ключ
+?>
+<?php
+string get_table()
+//получить таблицу
+?>
+<?php
+void like( mixed $field [ , string $match [, string $side] ] )
+//как и CI для списка
+?>
+<?php
+void limit(mixed $limit [, mixed $offset = ''] )
+//аналогично ф-ии limit CI для табл.
+?>
+<?php
+void order_by(mixed $order_by [, string $direction] )
+//аналогично ф-ии order_by CI для табл.
+?>
+<?php
+void or_like( mixed $field [ , string $match [, string $side] ] )
+//аналогично ф-ии or_like CI для табл.
+?>
+<?php
+void or_where( mixed $key [, string $value [, bool $escape] ])
+//аналогично ф-ии or_where CI для табл.
+?>
+<?php
+void render()
+//отображение табл.
+?>
+<?php
+void required_fields( string $var [, string $var [, string $... ]]  )
+//устанавливает проверяемые поля
+?>
+<?php
+void set_field_upload( string $field_name, string $upload_path)
+//устанавливает поле для скачивания
+?>
+<?php
+void set_language( string $language )
+//установка языка
+//пример
+$crud->set_language("greek"). 
+$crud->set_language($this->session->('language')); //для многоязычного сайта
+?>
+<?php
+void set_lang_string( string $handle, string $lang_string )
+//установить длинную строку
+ 
+    $this->grocery_crud->set_table('customers');
+    $this->grocery_crud->columns('customerName','phone','addressLine1','creditLimit');
+ 
+    $this->grocery_crud->set_lang_string('form_update_changes','Updating existing customer')
+                       ->set_lang_string('form_back_to_list','Go back to customers page')
+                       ->set_lang_string('form_save','Save customer into the database');
+ 
+    $output = $this->grocery_crud->render();
+ 
+    $this->_example_output($output);
+?>
+<?php
+void set_model( string $model_as_string );
+//устанавливает модель crud
+
+//1  в основной ф-ии добавим модель
+function just_an_example()
+{    
+    $crud = new grocery_CRUD();
+ 
+    $crud->set_model('My_Custom_model');
+    $crud->set_table('film');
+    $crud->set_relation_n_n('actors', 'film_actor', 'actor', 'film_id', 'actor_id', 'fullname','priority');  
+     
+    $output = $crud->render();
+ 
+    $this->_example_output($output); 
+
+}
+//2  ваша модель должна наследоваться от grocery_CRUD_Model. создать файл application/models/my_custom_model.php
+class My_Custom_model extends grocery_CRUD_Model  {
+ 
+    function get_relation_n_n_unselected_array($field_info, $selected_values)
+
+    {
+        $selection_primary_key = $this->get_primary_key($field_info->selection_table);
+ 
+        if($field_info->name = '....')
+
+        {
+            $this->db->where(....);
+            .......your custom queries
+        }
+ 
+        $this->db->order_by("{$field_info->selection_table}.{$field_info->title_field_selection_table}");
+
+        $results = $this->db->get($field_info->selection_table)->result();
+
+ 
+        $results_array = array();
+        foreach($results as $row)
+
+        {
+            if(!isset($selected_values[$row->{$field_info->primary_key_alias_to_selection_table}]))
+                $results_array[$row->{$field_info->primary_key_alias_to_selection_table}] = $row->{$field_info->title_field_selection_table}; 
+        }
+
+ 
+        return $results_array;        
+    }
+ 
+}  
+
+?>
+<?php
+void set_relation( string $field_name , string  $related_table, string  $related_title_field  [, mixed $where [, string $order_by ] ] )
+//установить отношение таблиц 1-n в бд. Это автоматически создаст выпадающий список, содержащий актуальную информацию а не идентификатор 
+//пример
+$crud->set_relation('user_id','users','username');
+$crud->set_relation('user_id','users','{username} - {last_name} {first_name}');
+$crud->set_relation('user_id','users','{username} ( {last_name} {first_name} )');
+$crud->set_relation('user_id','users','username',array('status' => 'active'));
+$crud->set_relation('user_id','users','username',null,'priority ASC');
+$crud->set_relation('user_id','users','username',array('status' => 'active'),'priority ASC');
+
+function employees_management()
+{
+    $crud = new grocery_CRUD();
+ 
+    $crud->set_theme('datatables');
+    $crud->set_table('employees');
+    $crud->display_as('officeCode','Office City');
+    $crud->set_subject('Employee');
+ 
+    $crud->set_relation('officeCode','offices','city');
+ 
+    $output = $crud->render();
+ 
+    $this->_example_output($output);
+}
+
+?>
+<?php
+void set_relation_n_n( string $field_name, string $relation_table, string $selection_table, string $primary_key_alias_to_this_table, string $primary_key_alias_to_selection_table , string $title_field_selection_table [ , string $priority_field_relation ] )
+
+//Установить отношение n-n Должна включать 3 табл. 
+
+?>
+
+<?php
+void set_rules(mixed $field [, string $label [, string $rules] ])
+//установка валидационного правила
+?>
+
+<?php
+void set_subject( string $subject [, bool $has_plural] )
+//название для кнопки "добавить"
+?>
+<?php
+void set_table(string $table_name)
+//установка основной табл. бд для полученя данных
+?>
+<?php
+void set_theme(string $theme)
+//установка вида отображения таблицы 'flexigrid' and 'datatables' 
+?>
+<?php
+void unset_add()
+//сброс операции добавления
+
+?>
+<?php
+void unset_columns( string $var [, string $var [, string $... ]]  )
+//исключение столбца из списка 
+
+?>
+<?php
+void unset_delete()
+//сброс операции удаления
+?>
+<?php
+void unset_edit()
+//сброс операции редактирования
+?>
+<?php
+void unset_operations()
+//сброс всех операций
+?>
+<?php
+void unset_texteditor(string $var [, string $var [, string $... ] ] )
+//удалить texteditor  в выбранном поле 
+?>
+<?php
+void where( mixed $key [, string $value [, bool $escape] ])
+//аналог команды where в CI
+?>
+
+<?php
+//пример отображения таблицы бд
+class Welcome extends CI_Controller {
+public function __construct() {
+        parent::__construct();
+        /* дополняем конструктор нужными библиотеками */
+        $this->load->database();
+        $this->load->helper('url');
+        $this->load->library('grocery_CRUD');
+     }
+ public function index()
+ {
+     /* здесь ваша главная страница */
+ }
+ function news() {
+     /* создали экземпляр CRUD */
+     $crud = new grocery_CRUD();
+     /* Сообщили, что работаем с таблицей news */
+     $crud->set_table('news');
+     /* в списке записей будем выводить поля, перечисленные ниже */
+     $crud->columns('Id_news', 'ndate', 'header', 'picture');
+     /* Но вместо адреса картинки покажем саму картинку */
+     $crud->callback_column('picture', array($this, 'pic_show'));
+     /* Тут опишем, как озаглавить поля таблицы, чтобы клиент тоже понимал,*/
+     /*о чем тут речь */
+     $crud->display_as('Id_news', 'Id')
+          ->display_as('ndate', 'Дата новости')
+          ->display_as('header', 'Заголовок')
+          ->display_as('txt', 'Текст новости')
+          ->display_as('picture', 'Картинка');
+     /* Этой строкой указали, что в поле picture - картинка,*/
+     /*которую необходимо предварительно закачать в папку pic/news/. */
+     /*В поле picture записывается имя файла, которое gC*/
+     /*сгенерирует при сохранении картинки */
+     $crud->set_field_upload('picture', 'pic/news/');
+     /* Указанный ниже сабжект используется везде, где даются */
+     /* комментарии типа, "добавить новость", "удалить новость" и т.п. */
+     $crud->set_subject('новость');
+     /* сортировка по умолчанию. Обратите внимание, там где возможно,*/
+     /* grocery CRUD использует конструкции, принятые в CI */
+     $crud->order_by('ndate', 'desc');
+     /* Поля, обязательные для заполнения */
+     $crud->required_fields('header', 'ndate', 'txt');
+     /* Единственная обязательная строчка. В $output уже сгенерированый html*/
+     /* cо списком записей или формой ввода/редактирования */
+     $output = $crud->render();
+     /* Выведем, вставив в наше представление */
+     $this->load->view('main', $output);
+ }
+ /* Показываем картинку */
+ function pic_show($primary_key, $row) {
+     if (is_file("pic/news/" . $row->picture)) {
+         return '<img src="'."pic/news/" . $row->picture.'" />';
+     }
+    return "";
+ }
+}
+
+?>

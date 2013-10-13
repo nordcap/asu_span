@@ -1,0 +1,339 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+:focus {
+	outline: 0;
+}
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+html {
+	height: 100%;
+}
+header, nav, section, article, aside, footer {
+	display: block;
+}
+body {
+	font: 12px/18px Arial, Tahoma, Verdana, sans-serif;
+	width: 100%;
+	height: 100%;
+}
+a {
+	color: blue;
+	outline: none;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+p {
+	margin: 0 0 18px
+}
+img {
+	border: none;
+}
+input {
+	vertical-align: middle;
+}
+#wrapper {
+	width: 1000px;
+	margin: 0 auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+/* Header
+-----------------------------------------------------------------------------*/
+#header {
+	height: 80px;
+	text-align: center;
+margin-top: 5px;
+	/*закругления*/
+	border-radius: 25px;
+	/*тень*/
+	box-shadow: 0px 0px 4px 0px #000;
+	/*градиент*/
+	background: #c3d9ff; /* Old browsers */
+	background: -moz-linear-gradient(top, #c3d9ff 0%, #b1c8ef 41%, #98b0d9 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c3d9ff), color-stop(41%,#b1c8ef), color-stop(100%,#98b0d9)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* IE10+ */
+	background: linear-gradient(top, #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* W3C */
+}
+/* Middle
+-----------------------------------------------------------------------------*/
+#middle {
+	width: 100%;
+	padding: 10px 0 50px;
+	height: 1%;
+	position: relative;
+}
+#middle:after {
+	content: '.';
+	display: block;
+	clear: both;
+	visibility: hidden;
+	height: 0;
+}
+#container {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+}
+#content {
+	padding: 0 230px 0 0;
+}
+/* Sidebar Right
+-----------------------------------------------------------------------------*/
+.sideRight {
+	float: left;
+	margin-right: -3px;
+	width: 200px;
+	margin-left: -200px;
+	position: relative;
+	/*закругления*/
+	border-radius: 25px;
+	/*тень*/
+	box-shadow: 0px 0px 4px 0px #000;
+	background: #00b7ea; /* Old browsers */
+	background: -moz-linear-gradient(top,  #00b7ea 0%, #009ec3 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00b7ea), color-stop(100%,#009ec3)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #00b7ea 0%,#009ec3 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #00b7ea 0%,#009ec3 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #00b7ea 0%,#009ec3 100%); /* IE10+ */
+	background: linear-gradient(top,  #00b7ea 0%,#009ec3 100%); /* W3C */
+}
+/* Footer
+-----------------------------------------------------------------------------*/
+#footer {
+	width: 1000px;
+	margin: -55px auto 0px;
+	height: 50px;
+	text-align: center;
+	position: relative;
+	/*закругления*/
+	border-radius: 25px;
+	/*тень*/
+	box-shadow: 0px 0px 4px 0px #000;
+	/*градиент*/
+	background: #c3d9ff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #c3d9ff 0%, #98b0d9 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c3d9ff), color-stop(100%,#98b0d9)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #c3d9ff 0%,#98b0d9 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #c3d9ff 0%,#98b0d9 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #c3d9ff 0%,#98b0d9 100%); /* IE10+ */
+	background: linear-gradient(top,  #c3d9ff 0%,#98b0d9 100%); /* W3C */
+}
+/* Кнопка добавления
+-----------------------------------------------------------------------------*/
+#btnadd {
+	background: url(../img/add.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+#btnadd:hover {
+	background-position: left bottom;
+}
+/* Кнопка копирования
+-----------------------------------------------------------------------------*/
+#btncopy {
+	background: url(../img/copy.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+#btncopy:hover {
+	background-position: left bottom;
+}
+/* Кнопка обновления
+-----------------------------------------------------------------------------*/
+#btnupdate {
+	background: url(../img/update.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-left: 30px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#btnupdate:hover {
+	background-position: left bottom;
+}
+/* Кнопка удаления
+-----------------------------------------------------------------------------*/
+#btndelete {
+	background: url(../img/delete.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-left: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#btndelete:hover {
+	background-position: left bottom;
+}
+/* Кнопка поиска
+-----------------------------------------------------------------------------*/
+#btnsearch {
+	background: url(../img/search.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+#btnsearch:hover {
+	background-position: left bottom;
+}
+/* Кнопка поиска
+-----------------------------------------------------------------------------*/
+#btnclear {
+	background: url(../img/clear.png);
+	/*display:block;  */
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+#btnclear:hover {
+	background-position: left bottom;
+}
+/*Заливка строк в таблице
+-----------------------------------------------------------------------------*/
+.color_tr {
+	background-color: #DCFFB9;
+}
+.color_table {
+  	/*градиент*/
+	background: #ccffcc; /* Old browsers */
+	background: -moz-linear-gradient(top, #ccffcc 0%, #66ff66 41%, #00cc00 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccffcc), color-stop(41%,#66ff66), color-stop(100%,#00cc00)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ccffcc 0%,#66ff66 41%,#00cc00 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ccffcc 0%,#66ff66 41%,#00cc00 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ccffcc 0%,#66ff66 41%,#00cc00 100%); /* IE10+ */
+	background: linear-gradient(top, #ccffcc 0%,#66ff66 41%,#00cc00 100%); /* W3C */
+
+}
+/*меню
+-----------------------------------------------------------------------------*/
+nav{
+	width: 960px;
+	margin: 15px auto 10px;
+	text-align: center;
+}
+nav ul{
+	margin: 0;
+	padding: 0;
+}
+nav li{
+	margin: 0 10px; /* Добавляем отступ по горизонтали */
+	display: inline-block;
+	*display: inline; /* IE7 и хуже */
+}
+nav a{
+	display: inline-block;
+	position: relative;
+	padding: 4px 15px;
+	border: 1px solid #0d80bd;
+	text-decoration: none;
+	color: #000099;
+	font: bold 14px 'Lucida sans', Arial, Helvetica;
+	background-color: #9be0fb;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#9be0fb), to(#00AFDD));
+	background-image: -webkit-linear-gradient(top, #9be0fb, #00AFDD);
+	background-image: -moz-linear-gradient(top, #9be0fb, #00AFDD);
+	background-image: -ms-linear-gradient(top, #9be0fb, #00AFDD);
+	background-image: -o-linear-gradient(top, #9be0fb, #00AFDD);
+	background-image: linear-gradient(top, #9be0fb, #00AFDD);
+	border-radius: 3px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05) inset, 0 0 1px 0 rgba(0, 0, 0, .2), 0 2px 2px rgba(0, 0, 0, .3), 0 10px 10px -5px rgba(0, 0, 0, .2);
+}
+nav a:hover{
+	background-color: #ccffff;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ccffff), to(#99ffff));
+	background-image: -webkit-linear-gradient(top, #ccffff, #99ffff);
+	background-image: -moz-linear-gradient(top, #ccffff, #99ffff);
+	background-image: -ms-linear-gradient(top, #ccffff, #99ffff);
+	background-image: -o-linear-gradient(top, #ccffff, #99ffff);
+	background-image: linear-gradient(top, #ccffff, #99ffff);
+}
+nav a:active{
+	top: 1px;  /* Имитация эффекта нажатия кнопки */
+	background: #BFD5FB;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05) inset, 0 0 1px 0px rgba(0, 0, 0, .2), 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+label {
+  display: block;
+}
+
+nav #print a {
+	background: url(../img/print_48.png);
+	background-repeat: no-repeat;
+	position: relative;
+	top: -10px;
+	width: 20px;
+	height: 40px;
+	color: transparent;
+	border: none;
+	box-shadow: none;
+
+}
